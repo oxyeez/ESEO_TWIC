@@ -54,7 +54,7 @@ public class VilleController {
 	}
 	
 	@DeleteMapping()
-	public void deleteVille(@RequestParam(required  = true, value="codeCommune") String codeCommunet ) {
+	public void deleteVille(@RequestParam(required  = true, value="codeCommune") String codeCommune ) {
 		DaoFactory dao = DaoFactory.getInstance();
 
 		dao.getVilleFranceDao().deleteVille(codeCommune);

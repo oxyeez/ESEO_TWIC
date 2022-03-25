@@ -3,12 +3,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.dao.impl.VilleFranceDaoImpl;
 
-
+//@Component
 public class DaoFactory {
+	@Value("${springboot.datasource.url}")
     private String url;
+	
+	@Value("${springboot.datasource.username}")
     private String username;
+	
+	@Value("${springboot.datasource.password}")
     private String password;
 
     DaoFactory(String url, String username, String password) {
@@ -23,7 +31,7 @@ public class DaoFactory {
         } catch (ClassNotFoundException e) {
         }
         DaoFactory instance = new DaoFactory(
-                "jdbc:mariadb://localhost:3306/TWIC", "TablePlus", "");
+                "jdbc:mariadb://localhost:3306/TWIC", "twic", "twic123");
         return instance;
     }
 

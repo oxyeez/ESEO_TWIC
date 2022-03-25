@@ -43,6 +43,7 @@ public class VilleFranceDaoImpl implements VilleFranceDao {
             	VilleFrance ville = new VilleFrance(codeCommune, nomCommune, codePostal, libelleAcheminement, ligne5, latitude, longitude);
 
                 villes.add(ville);
+                connexion.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,6 +74,7 @@ public class VilleFranceDaoImpl implements VilleFranceDao {
             	VilleFrance ville = new VilleFrance(codeCommune, nomCommune, codePostal, libelleAcheminement, ligne5, latitude, longitude);
 
                 villes.add(ville);
+                connexion.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,12 +84,12 @@ public class VilleFranceDaoImpl implements VilleFranceDao {
 
 	@Override
 	public void addVille(VilleFrance ville) {
-        Connection connection = null;
+        Connection connexion = null;
         PreparedStatement preparedStatement = null;
 
         try {
-            connection = daoFactory.getConnection();
-            preparedStatement = connection.prepareStatement("INSERT INTO ville_france VALUES(?, ?, ?, ?, ?, ?, ?);");
+            connexion = daoFactory.getConnection();
+            preparedStatement = connexion.prepareStatement("INSERT INTO ville_france VALUES(?, ?, ?, ?, ?, ?, ?);");
             preparedStatement.setString(1, ville.getCodeCommune());
             preparedStatement.setString(2, ville.getNomCommune());
             preparedStatement.setString(3, ville.getCodePostal());
@@ -97,6 +99,7 @@ public class VilleFranceDaoImpl implements VilleFranceDao {
             preparedStatement.setString(7, ville.getLongitude());
 
             preparedStatement.executeUpdate();
+            connexion.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -106,5 +109,17 @@ public class VilleFranceDaoImpl implements VilleFranceDao {
 		DaoFactory dao = DaoFactory.getInstance();
 		VilleFrance newVille = new VilleFrance("53223", "SAINT GERMAIN DE COULAMER", "53700", "SAINT GERMAIN DE COULAMER", "", "48.2644444", "-0.17055555555555554");
 		dao.getVilleFranceDao().addVille(newVille);
+	}
+
+	@Override
+	public void correctVille(VilleFrance ville) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteVille(String codeCommune) {
+		// TODO Auto-generated method stub
+		
 	}
 }
