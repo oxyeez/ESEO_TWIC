@@ -63,8 +63,6 @@ local.properties
 # ---- Java ----
 # Compiled class file
 *.class
-*.classpath
-*.project
 
 # Log file
 *.log
@@ -88,6 +86,24 @@ local.properties
 hs_err_pid*
 replay_pid*
 
+# ---- Maven ----
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
 src/main/resources
 .DS_Store
-/target/

@@ -6,10 +6,11 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.dao.impl.VilleFranceDaoImpl;
+import com.dao.impl.VilleDaoImpl;
 
-//@Component
+@Component("daoFactory")
 public class DaoFactory {
+	
 	@Value("${springboot.datasource.url}")
     private String url;
 	
@@ -18,21 +19,18 @@ public class DaoFactory {
 	
 	@Value("${springboot.datasource.password}")
     private String password;
+	
+	@Value("${spring.datasource.driver-class-name}")
+	private static String driverClassName;
 
-    DaoFactory(String url, String username, String password) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-    }
+    DaoFactory() {}
 
     public static DaoFactory getInstance() {
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
+            Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
         }
-        DaoFactory instance = new DaoFactory(
-                "jdbc:mariadb://localhost:3306/TWIC", "twic", "twic123");
-        return instance;
+        return new DaoFactory();
     }
 
     public Connection getConnection() throws SQLException {
@@ -41,8 +39,8 @@ public class DaoFactory {
         return connexion; 
     }
     
-    public VilleFranceDao getVilleFranceDao() {
-    	return new VilleFranceDaoImpl(this);
+    public VilleDao getVilleFranceDao() {
+    	return new VilleDaoImpl();
     }
 
 }
