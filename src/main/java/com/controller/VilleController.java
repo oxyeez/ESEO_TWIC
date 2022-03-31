@@ -1,10 +1,12 @@
 package com.controller;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,48 +17,56 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.blo.VilleBlo;
-import com.dto.Ville;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.Ville;
+import com.service.VilleService;
 
-@RequestMapping(value="/ville")
+import javassist.tools.rmi.ObjectNotFoundException;
+
+@RequestMapping(value = "/ville")
 @RestController
 public class VilleController {
 
 	@Autowired
-	VilleBlo villeBloService;
-	
+	VilleService villeService;
+
 	@GetMapping()
 	@ResponseBody
-	public String listVilles(@RequestParam(required=false, value="codePostal") String postCode) throws JsonProcessingException {
-		List<Ville> villes = villeBloService.getVilles(postCode);
+	public String listVilles(@RequestParam(required = false, value = "codePostal") String codePostal, HttpServletResponse response)
+			throws JsonProcessingException {
+		List<Ville> villes = villeService.getVilles(codePostal);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
-		String ret = mapper.writeValueAsString(villes);
-		
-		return ret;
+		return mapper.writeValueAsString(villes);
 	}
-	
+
 	@PostMapping()
-	public void addVille(@RequestBody Ville newVille) throws JsonMappingException, JsonProcessingException {
-		villeBloService.addVille(newVille);
+	public void addVille(@RequestBody Ville newVille, HttpServletResponse response) {
+		try {
+			villeService.createVille(newVille);
+		} catch (SQLException e) {
+			response.setStatus(HttpStatus.CONFLICT.value());
+		}
 	}
-	
-	
+
+
 	@PutMapping()
-	public ResponseEntity<HttpStatus> correct(@RequestBody Ville newVille,
-						@RequestParam(required=true, value="codeCommune") String codeCommune ) {
-		return villeBloService.updateVille(codeCommune, newVille);
+	public void replace(@RequestBody Ville newVille, HttpServletResponse response) {
+		try {
+			villeService.replaceVille(newVille);
+		} catch (ObjectNotFoundException e) {
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+		}
 	}
-	
+
 	@DeleteMapping()
-	public void deleteVille(@RequestParam(required=true, value="codeCommune") String codeCommune ) {
-		villeBloService.deleteVille(codeCommune);
+	public void deleteVille(@RequestParam(required = true, value = "codeCommune") String codeCommune, HttpServletResponse response) {
+		try {
+			villeService.deleteVille(codeCommune);
+		} catch (ObjectNotFoundException e) {
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+		}
 	}
 
 }
-
-
