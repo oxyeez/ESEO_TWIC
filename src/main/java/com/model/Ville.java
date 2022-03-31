@@ -29,8 +29,8 @@ public class Ville {
 	private String ligne;
 	
 	@Column(name="Latitude")
-	private String longitude;
+	private String latitude;
 	
 	@Column(name="Longitude")
-	private String latitude;
+	private String longitude;
 }

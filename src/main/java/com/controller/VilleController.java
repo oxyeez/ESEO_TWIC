@@ -33,7 +33,7 @@ public class VilleController {
 
 	@GetMapping()
 	@ResponseBody
-	public String listVilles(@RequestParam(required = false, value = "codePostal") String codePostal, HttpServletResponse response)
+	public String listVilles(@RequestParam(required = false, value = "codePostal") String codePostal)
 			throws JsonProcessingException {
 		List<Ville> villes = villeService.getVilles(codePostal);
 		
