@@ -39,7 +39,7 @@ public class DistanceService {
 
         double c = 2 * Math.asin(Math.sqrt(a));
         
-        double r = 6371*1000;
+        double r = 6371e3;
         
         return (int) Math.round(c * r);
     }

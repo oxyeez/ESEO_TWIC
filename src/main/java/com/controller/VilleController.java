@@ -36,7 +36,7 @@ public class VilleController {
 	public String listVilles(@RequestParam(required = false, value = "codePostal") String codePostal)
 			throws JsonProcessingException {
 		List<Ville> villes = villeService.getVilles(codePostal);
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(villes);
 	}
@@ -50,7 +50,6 @@ public class VilleController {
 		}
 	}
 
-
 	@PutMapping()
 	public void replace(@RequestBody Ville newVille, HttpServletResponse response) {
 		try {
@@ -61,12 +60,12 @@ public class VilleController {
 	}
 
 	@DeleteMapping()
-	public void deleteVille(@RequestParam(required = true, value = "codeCommune") String codeCommune, HttpServletResponse response) {
+	public void deleteVille(@RequestParam(required = true, value = "codeCommune") String codeCommune,
+			HttpServletResponse response) {
 		try {
 			villeService.deleteVille(codeCommune);
 		} catch (ObjectNotFoundException e) {
 			response.setStatus(HttpStatus.NOT_FOUND.value());
 		}
 	}
-
 }
