@@ -26,20 +26,20 @@ public class VilleService {
     public Object getVilles(final String codePostal, int size, int page) {
     	if (codePostal == null) {
     		if (size != -1 && page != -1) {
-    			Pageable pageable = PageRequest.of(page, size);
+    			Pageable pageable = PageRequest.of(page-1, size);
     			return villeRepo.findByOrderByNomCommune(pageable);
     		} else if (size != -1 && page == -1) {
-    			Pageable pageable = PageRequest.of(1, size);
+    			Pageable pageable = PageRequest.of(0, size);
     			return villeRepo.findByOrderByNomCommune(pageable);
     		} else {
     			return villeRepo.findByOrderByNomCommune();
     		}
     	} else {
     		if (size != -1 && page != -1) {
-    			Pageable pageable = PageRequest.of(page, size);
+    			Pageable pageable = PageRequest.of(page-1, size);
     			return villeRepo.findByCodePostalOrderByNomCommune(codePostal, pageable);
     		} else if (size != -1 && page == -1) {
-    			Pageable pageable = PageRequest.of(1, size);
+    			Pageable pageable = PageRequest.of(0, size);
     			return villeRepo.findByCodePostalOrderByNomCommune(codePostal, pageable);
     		} else {
     			return villeRepo.findByCodePostalOrderByNomCommune(codePostal);
