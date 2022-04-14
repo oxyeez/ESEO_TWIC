@@ -107,3 +107,6 @@ buildNumber.properties
 
 src/main/resources
 .DS_Store
+
+.idea
+*.iml

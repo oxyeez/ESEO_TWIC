@@ -1,10 +1,11 @@
 package com.service;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.model.Ville;
@@ -22,11 +23,27 @@ public class VilleService {
         return villeRepo.findById(codeCommune);
     }
     
-    public List<Ville> getVilles(final String codePostal) {
+    public Object getVilles(final String codePostal, int size, int page) {
     	if (codePostal == null) {
-    		return villeRepo.findAll();
+    		if (size != -1 && page != -1) {
+    			Pageable pageable = PageRequest.of(page, size);
+    			return villeRepo.findByOrderByNomCommune(pageable);
+    		} else if (size != -1 && page == -1) {
+    			Pageable pageable = PageRequest.of(1, size);
+    			return villeRepo.findByOrderByNomCommune(pageable);
+    		} else {
+    			return villeRepo.findByOrderByNomCommune();
+    		}
     	} else {
-    		return villeRepo.findByCodePostal(codePostal);
+    		if (size != -1 && page != -1) {
+    			Pageable pageable = PageRequest.of(page, size);
+    			return villeRepo.findByCodePostalOrderByNomCommune(codePostal, pageable);
+    		} else if (size != -1 && page == -1) {
+    			Pageable pageable = PageRequest.of(1, size);
+    			return villeRepo.findByCodePostalOrderByNomCommune(codePostal, pageable);
+    		} else {
+    			return villeRepo.findByCodePostalOrderByNomCommune(codePostal);
+    		}
     	}
     }
 

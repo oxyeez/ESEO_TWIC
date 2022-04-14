@@ -1,7 +1,7 @@
 package com.controller;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Ville;
 import com.service.VilleService;
 
@@ -33,12 +32,26 @@ public class VilleController {
 
 	@GetMapping()
 	@ResponseBody
-	public String listVilles(@RequestParam(required = false, value = "codePostal") String codePostal)
+	public Object listVilles(@RequestParam(required = false, value = "codePostal") String codePostal,
+			@RequestParam(required = false, value = "codeCommune") String codeCommune, 
+			@RequestParam(required = false, value = "size", defaultValue = "-1") int size,
+			@RequestParam(required = false, value = "page", defaultValue = "-1") int page,
+			HttpServletResponse response)
 			throws JsonProcessingException {
-		List<Ville> villes = villeService.getVilles(codePostal);
-
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(villes);
+		if (codeCommune != null && codePostal != null) {
+			response.setStatus(HttpStatus.REQUEST_HEADER_FIELDS_TOO_LARGE.value());
+			return null;
+		} else if (codeCommune != null && codePostal == null) {
+			Optional<Ville> ville = villeService.getVille(codeCommune);
+			if (ville.isPresent()) {
+				return ville.get();
+			} else {
+				response.setStatus(HttpStatus.NOT_FOUND.value());
+				return null;
+			}
+		} else {
+			return villeService.getVilles(codePostal, size, page);
+		}
 	}
 
 	@PostMapping()
