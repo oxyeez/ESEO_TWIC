@@ -31,10 +31,11 @@ public class VilleServiceTest {
 
     @Test
     public void testGetVille() {
+        Optional<Ville> villeOpt = Optional.of(new Ville());
         when(villeRepo.findById(anyString()))
-                .thenReturn(Optional.of(new Ville()));
+                .thenReturn(villeOpt);
         assertThat(villeService.getVille("49007"))
-                .isEqualTo(Optional.of(new Ville()));
+                .isEqualTo(villeOpt);
     }
 
     @Test
