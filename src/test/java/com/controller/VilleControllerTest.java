@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -80,7 +81,7 @@ class VilleControllerTest {
         String requestBody = mapper.writeValueAsString(requestVille);
         doThrow(SQLException.class)
                 .when(villeServiceMock)
-                .createVille(requestVille);
+                .createVille(any(VilleDTO.class));
         mockMvc.perform(post("/ville")
                         .contentType("application/json")
                         .content(requestBody))
@@ -105,7 +106,7 @@ class VilleControllerTest {
         String requestBody = mapper.writeValueAsString(requestVille);
         doThrow(ObjectNotFoundException.class)
                 .when(villeServiceMock)
-                .replaceVille(requestVille);
+                .replaceVille(any(VilleDTO.class));
         mockMvc.perform(put("/ville")
                         .contentType("application/json")
                         .content(requestBody))
