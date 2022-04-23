@@ -3,6 +3,7 @@ package com.service;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import com.dto.VilleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,18 +48,18 @@ public class VilleService {
     	}
     }
 
-    public void createVille(Ville ville) throws SQLException {
+    public void createVille(VilleDTO ville) throws SQLException {
     	if (villeRepo.existsById(ville.getCodeCommune())) {
     		throw new SQLException("Primary key already exists!");
     	}
-    	villeRepo.save(ville);
+    	villeRepo.save(ville.toEntity());
     }
 
-    public void replaceVille(final Ville ville) throws ObjectNotFoundException {
+    public void replaceVille(final VilleDTO ville) throws ObjectNotFoundException {
     	if (!villeRepo.existsById(ville.getCodeCommune())) {
     		throw new ObjectNotFoundException("Record does not exists!");
     	}
-    	villeRepo.save(ville);
+    	villeRepo.save(ville.toEntity());
     }
     
     public void deleteVille(final String id) throws ObjectNotFoundException {

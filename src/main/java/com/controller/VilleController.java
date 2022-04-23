@@ -1,27 +1,16 @@
 package com.controller;
 
-import java.sql.SQLException;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.dto.VilleDTO;
 import com.model.Ville;
 import com.service.VilleService;
-
 import javassist.tools.rmi.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.Optional;
 
 @RequestMapping(value = "/ville")
 @RestController
@@ -36,12 +25,11 @@ public class VilleController {
 			@RequestParam(required = false, value = "codeCommune") String codeCommune, 
 			@RequestParam(required = false, value = "size", defaultValue = "-1") int size,
 			@RequestParam(required = false, value = "page", defaultValue = "-1") int page,
-			HttpServletResponse response)
-			throws JsonProcessingException {
+			HttpServletResponse response) {
 		if (codeCommune != null && codePostal != null) {
-			response.setStatus(HttpStatus.REQUEST_HEADER_FIELDS_TOO_LARGE.value());
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			return null;
-		} else if (codeCommune != null && codePostal == null) {
+		} else if (codeCommune != null) {
 			Optional<Ville> ville = villeService.getVille(codeCommune);
 			if (ville.isPresent()) {
 				return ville.get();
@@ -55,7 +43,7 @@ public class VilleController {
 	}
 
 	@PostMapping()
-	public void addVille(@RequestBody Ville newVille, HttpServletResponse response) {
+	public void addVille(@RequestBody VilleDTO newVille, HttpServletResponse response) {
 		try {
 			villeService.createVille(newVille);
 		} catch (SQLException e) {
@@ -64,7 +52,7 @@ public class VilleController {
 	}
 
 	@PutMapping()
-	public void replace(@RequestBody Ville newVille, HttpServletResponse response) {
+	public void replace(@RequestBody VilleDTO newVille, HttpServletResponse response) {
 		try {
 			villeService.replaceVille(newVille);
 		} catch (ObjectNotFoundException e) {
