@@ -65,7 +65,11 @@ class VilleControllerTest {
 
     @Test
     void testPostVille() throws Exception {
-        VilleDTO requestVille = new VilleDTO("49007", "Angers", "49000", "", "", "", "");
+        VilleDTO requestVille = VilleDTO.builder()
+                                        .codeCommune("49007")
+                                        .nomCommune("Angers")
+                                        .codePostal("49000")
+                                        .build();
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = mapper.writeValueAsString(requestVille);
         mockMvc.perform(post("/ville")
@@ -76,7 +80,11 @@ class VilleControllerTest {
 
     @Test
     void testPostVilleAlreadyKnown() throws Exception {
-        VilleDTO requestVille = new VilleDTO("49007", "Angers", "49000", "", "", "", "");
+        VilleDTO requestVille = VilleDTO.builder()
+                                        .codeCommune("49007")
+                                        .nomCommune("Angers")
+                                        .codePostal("49000")
+                                        .build();
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = mapper.writeValueAsString(requestVille);
         doThrow(SQLException.class)
@@ -90,7 +98,11 @@ class VilleControllerTest {
 
     @Test
     void testPutVille() throws Exception {
-        VilleDTO requestVille = new VilleDTO("49007", "Angers", "49000", "", "", "", "");
+        VilleDTO requestVille = VilleDTO.builder()
+                                        .codeCommune("49007")
+                                        .nomCommune("Angers")
+                                        .codePostal("49000")
+                                        .build();
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = mapper.writeValueAsString(requestVille);
         mockMvc.perform(put("/ville")
@@ -101,7 +113,11 @@ class VilleControllerTest {
 
     @Test
     void testPutVilleUnknown() throws Exception {
-        VilleDTO requestVille = new VilleDTO("49007", "Angers", "49000", "", "", "", "");
+        VilleDTO requestVille = VilleDTO.builder()
+                                        .codeCommune("49007")
+                                        .nomCommune("Angers")
+                                        .codePostal("49000")
+                                        .build();
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = mapper.writeValueAsString(requestVille);
         doThrow(ObjectNotFoundException.class)
